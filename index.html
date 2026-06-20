@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UDHARI KHATA - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #f2f6f9;
+            color: #0f2633;
+            padding: 22px;
+            min-height: 100vh;
+        }
+
+        .app-wrapper {
+            max-width: 1240px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .app-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0b2b3b;
+        }
+
+        .app-header h1 i {
+            color: #0a8f45;
+            margin-right: 6px;
+            font-size: 0.9em;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn,
+        .small-btn,
+        .icon-btn {
+            border: 1px solid #d9e2ea;
+            background: #fff;
+            color: #183847;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.18s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-btn {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+
+        .nav-btn.active {
+            background: #0a8f45;
+            color: #fff;
+            border-color: #0a8f45;
+            box-shadow: 0 6px 14px rgba(10, 143, 69, 0.2);
+        }
+
+        .small-btn {
+            padding: 7px 10px;
+            font-size: 12px;
+        }
+
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        .icon-btn.danger {
+            color: #b91c1c;
+            border-color: #fecaca;
+            background: #fff7f7;
+        }
+
+        .icon-btn.danger:hover {
+            border-color: #fca5a5;
+            background: #fff1f1;
+        }
+
+        .nav-btn i,
+        .small-btn i,
+        .icon-btn i {
+            font-size: 0.95em;
+        }
+
+        .nav-btn:hover,
+        .small-btn:hover,
+        .icon-btn:hover {
+            transform: translateY(-1px);
+            border-color: #0a8f45;
+        }
+
+        .url-bar {
+            background: #fff;
+            padding: 14px 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            border: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .url-bar label {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1a3a4a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .url-bar input {
+            flex: 1;
+            min-width: 240px;
+            padding: 10px 13px;
+            border: 1.5px solid #dde3e9;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #f8fafc;
+        }
+
+        .url-bar input:focus,
+        .field-group input:focus,
+        .field-group select:focus,
+        .search-input:focus {
+            border-color: #0a8f45;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(10, 143, 69, 0.1);
+        }
+
+        #testResult {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card,
+        .panel,
+        .form-card {
+            background: #fff;
+            border: 1px solid #e4ecf2;
+            box-shadow: 0 4px 18px rgba(17, 42, 57, 0.05);
+        }
+
+        .stat-card {
+            padding: 16px 14px;
+            border-radius: 8px;
+            border-left: 5px solid #0a8f45;
+        }
+
+        .stat-card.highlight {
+            border-left-color: #f59e0b;
+        }
+
+        .stat-card.danger {
+            border-left-color: #ef4444;
+        }
+
+        .stat-card.info {
+            border-left-color: #2563eb;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            font-weight: 800;
+            color: #5f7d8c;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .value {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0b2b3b;
+            word-break: break-word;
+        }
+
+        .stat-card .value i {
+            font-size: 14px;
+            color: #0a8f45;
+            margin-right: 5px;
+        }
+
+        .stat-card.highlight .value i {
+            color: #f59e0b;
+        }
+
+        .stat-card.danger .value i {
+            color: #ef4444;
+        }
+
+        .stat-card.info .value i {
+            color: #2563eb;
+        }
+
+        .row-split {
+            display: grid;
+            grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .row-split.entry-only {
+            grid-template-columns: minmax(320px, 620px);
+        }
+
+        .form-card,
+        .panel {
+            border-radius: 8px;
+            padding: 22px;
+        }
+
+        .panel + .panel {
+            margin-top: 18px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .section-title h2 {
+            font-size: 20px;
+            color: #0b2b3b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title h2 i {
+            color: #0a8f45;
+        }
+
+        .field-group {
+            margin-bottom: 12px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e3a4a;
+            margin-bottom: 5px;
+        }
+
+        .field-group input,
+        .field-group select,
+        .search-input {
+            width: 100%;
+            padding: 10px 13px;
+            border: 1.5px solid #dde3e9;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #fafcfe;
+        }
+
+        .field-group input[readonly] {
+            background: #f1f5f9;
+            font-weight: 700;
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .row-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 14px;
+            background: #0a8f45;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.18s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .btn-save:hover {
+            background: #087a3a;
+            transform: translateY(-1px);
+        }
+
+        .btn-save:disabled {
+            background: #8ab89a;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .cancel-edit {
+            margin-top: 10px;
+            width: 100%;
+            justify-content: center;
+            display: none;
+        }
+
+        .status-msg {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            display: none;
+        }
+
+        .status-msg.error {
+            display: block;
+            background: #fde8e8;
+            color: #a61e1e;
+            border: 1px solid #f5c2c2;
+        }
+
+        .status-msg.success {
+            display: block;
+            background: #e6f5ed;
+            color: #0a6b33;
+            border: 1px solid #b8dfcb;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px 18px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 14px;
+        }
+
+        .dlabel {
+            color: #4a6a7a;
+            font-weight: 700;
+        }
+
+        .dvalue {
+            font-weight: 800;
+            color: #0b2b3b;
+            text-align: right;
+        }
+
+        .positive {
+            color: #0a8f45;
+        }
+
+        .negative {
+            color: #ef4444;
+        }
+
+        .neutral {
+            color: #f59e0b;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: minmax(180px, 1fr) 170px 150px auto auto;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid #e6edf3;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+            background: #fff;
+        }
+
+        th,
+        td {
+            padding: 11px 10px;
+            border-bottom: 1px solid #edf2f7;
+            text-align: left;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #f6f9fb;
+            color: #365466;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.25px;
+            font-weight: 800;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        tr:hover td {
+            background: #fbfdff;
+        }
+
+        .text-link {
+            border: none;
+            background: transparent;
+            color: #075f9d;
+            font-weight: 800;
+            cursor: pointer;
+            padding: 0;
+            text-align: left;
+        }
+
+        .text-link:hover {
+            text-decoration: underline;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            padding: 4px 9px;
+            font-size: 12px;
+            font-weight: 800;
+            background: #eef6f1;
+            color: #087a3a;
+        }
+
+        .pill.li {
+            background: #fff7e8;
+            color: #9a5b00;
+        }
+
+        .pill.pending {
+            background: #fff7e8;
+            color: #9a5b00;
+        }
+
+        .pill.completed {
+            background: #e8f6ee;
+            color: #087a3a;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .reminder-actions a,
+        .reminder-actions button {
+            color: #183847;
+        }
+
+        .empty-state {
+            padding: 22px;
+            color: #6b8796;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .ledger-panel {
+            display: none;
+        }
+
+        .ledger-panel.active {
+            display: flex;
+        }
+
+        .ledger-panel {
+            position: fixed;
+            inset: 0;
+            z-index: 90;
+            background: rgba(15, 38, 51, 0.42);
+            backdrop-filter: blur(2px);
+            padding: 28px 18px;
+            overflow: auto;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .ledger-shell {
+            width: min(1040px, 100%);
+            background: #fff;
+            border: 1px solid #dbe5ec;
+            border-radius: 12px;
+            box-shadow: 0 24px 60px rgba(8, 23, 33, 0.28);
+            padding: 20px;
+        }
+
+        .inline-edit-panel {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 110;
+            background: rgba(15, 38, 51, 0.42);
+            backdrop-filter: blur(2px);
+            padding: 28px 18px;
+            overflow: auto;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .inline-edit-panel.active {
+            display: flex;
+        }
+
+        .inline-edit-shell {
+            width: min(920px, 100%);
+            background: #fff;
+            border: 1px solid #dbe5ec;
+            border-radius: 12px;
+            box-shadow: 0 24px 60px rgba(8, 23, 33, 0.28);
+            padding: 20px;
+        }
+
+        .inline-edit-actions {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .ledger-summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .mini-stat {
+            background: #f6f9fb;
+            border: 1px solid #e6edf3;
+            border-radius: 8px;
+            padding: 11px;
+        }
+
+        .mini-stat span {
+            display: block;
+            color: #607d8c;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .mini-stat strong {
+            font-size: 18px;
+            color: #0b2b3b;
+        }
+
+        .text-muted {
+            color: #718a98;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 920px) {
+            .row-split,
+            .inline-edit-actions,
+            .toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .inline-edit-panel {
+                padding: 14px;
+            }
+
+            .inline-edit-shell {
+                padding: 16px;
+            }
+
+            .ledger-panel {
+                padding: 14px;
+            }
+
+            .ledger-shell {
+                padding: 16px;
+            }
+
+            .detail-grid,
+            .ledger-summary {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 14px;
+            }
+
+            .app-header h1 {
+                font-size: 24px;
+            }
+
+            .row-2,
+            .row-3,
+            .detail-grid,
+            .ledger-summary {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .url-bar {
+                align-items: stretch;
+            }
+
+            .url-bar input,
+            .url-bar .small-btn {
+                width: 100%;
+            }
+
+            .form-card,
+            .panel {
+                padding: 16px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .stat-card .value {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <h1><i class="fas fa-book"></i>UDHARI KHATA</h1>
+            <div class="top-actions">
+                <button class="nav-btn active" id="entryNav" type="button" onclick="showView('entry')">
+                    <i class="fas fa-pen"></i> Entry
+                </button>
+                <button class="nav-btn" id="dashboardNav" type="button" onclick="showView('dashboard')">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </button>
+                <button class="small-btn" type="button" onclick="refreshAll()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </header>
+
+        <div class="url-bar">
+            <label for="webAppUrl"><i class="fas fa-link"></i> Web App URL</label>
+            <input type="text" id="webAppUrl" value="https://script.google.com/macros/s/AKfycbxrHibnwBmtE78BUSQAPQD8_VMyxd4qU08NhRj1BQQkkS01CXLO3KvX5BT7eHOJfG3W/exec" />
+            <button class="small-btn" type="button" onclick="testConnection()">
+                <i class="fas fa-plug"></i> Test
+            </button>
+            <span id="testResult"></span>
+        </div>
+
+        <section class="view active" id="entryView">
+            <div class="row-split entry-only">
+                <div class="form-card">
+                    <div class="section-title">
+                        <h2 id="formTitle"><i class="fas fa-pen-alt"></i> New Entry</h2>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="type">Type</label>
+                        <select id="type" onchange="updateLabels()">
+                            <option value="addUdhariDi">UDHARI DI (Paise Aane)</option>
+                            <option value="addUdhariLi">UDHARI LI (Paise Dene)</option>
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" onchange="calculateMonths()" />
+                    </div>
+
+                    <div class="row-2">
+                        <div class="field-group">
+                            <label id="nameLabel" for="name">Party Name</label>
+                            <input type="text" id="name" placeholder="Name" autocomplete="name" />
+                        </div>
+                        <div class="field-group">
+                            <label for="mobile">Mobile</label>
+                            <input type="tel" id="mobile" placeholder="98XXXXXXXX" autocomplete="tel" />
+                        </div>
+                    </div>
+
+                    <div class="row-3">
+                        <div class="field-group">
+                            <label id="amountLabel" for="amount">Amount</label>
+                            <input type="number" id="amount" placeholder="0" oninput="calculateInterest()" />
+                        </div>
+                        <div class="field-group">
+                            <label for="rate">Rate % (Monthly)</label>
+                            <input type="number" id="rate" placeholder="2" oninput="calculateInterest()" />
+                        </div>
+                        <div class="field-group">
+                            <label for="month">Duration (Months)</label>
+                            <input type="number" id="month" placeholder="Auto" readonly />
+                        </div>
+                    </div>
+
+                    <div class="row-2">
+                        <div class="field-group">
+                            <label id="interestLabel" for="interest">Interest</label>
+                            <input type="number" id="interest" readonly />
+                        </div>
+                        <div class="field-group">
+                            <label id="totalLabel" for="total">Total</label>
+                            <input type="number" id="total" readonly />
+                        </div>
+                    </div>
+
+                    <div class="row-2">
+                        <div class="field-group">
+                            <label id="paidLabel" for="paid">Received/Paid</label>
+                            <input type="number" id="paid" placeholder="0" oninput="calculateBalance()" />
+                        </div>
+                        <div class="field-group">
+                            <label id="balanceLabel" for="balance">Balance</label>
+                            <input type="number" id="balance" readonly />
+                        </div>
+                    </div>
+
+                    <div class="row-2">
+                        <div class="field-group">
+                            <label for="status">Status</label>
+                            <select id="status">
+                                <option value="Pending">Pending</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="remarks">Remarks</label>
+                            <input type="text" id="remarks" placeholder="Optional" />
+                        </div>
+                    </div>
+
+                    <button class="btn-save" type="button" onclick="saveData()" id="saveBtn">
+                        <i class="fas fa-save"></i> SAVE ENTRY
+                    </button>
+                    <button class="small-btn cancel-edit" type="button" onclick="cancelEdit()" id="cancelEditBtn">
+                        <i class="fas fa-times"></i> Cancel Edit
+                    </button>
+                    <div id="statusMsg" class="status-msg"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="view" id="dashboardView">
+            <div class="dashboard-grid" id="dashboardCards">
+                <div class="stat-card"><div class="label">Total DI</div><div class="value"><i class="fas fa-arrow-up"></i><span id="cardDi">0</span></div></div>
+                <div class="stat-card highlight"><div class="label">Total LI</div><div class="value"><i class="fas fa-arrow-down"></i><span id="cardLi">0</span></div></div>
+                <div class="stat-card info"><div class="label">Paise Aane</div><div class="value"><i class="fas fa-hand-holding-usd"></i><span id="cardAane">0</span></div></div>
+                <div class="stat-card danger"><div class="label">Paise Dene</div><div class="value"><i class="fas fa-hand-holding-heart"></i><span id="cardDene">0</span></div></div>
+                <div class="stat-card"><div class="label">Interest Earn</div><div class="value"><i class="fas fa-coins"></i><span id="cardInterestEarn">0</span></div></div>
+                <div class="stat-card highlight"><div class="label">Interest Pay</div><div class="value"><i class="fas fa-coins"></i><span id="cardInterestPay">0</span></div></div>
+                <div class="stat-card info"><div class="label">Net Position</div><div class="value" id="cardNet"><i class="fas fa-balance-scale"></i>0</div></div>
+            </div>
+
+            <div class="panel">
+                <div class="section-title">
+                    <h2><i class="fas fa-chart-pie"></i> Summary Details</h2>
+                    <span class="text-muted">Last updated: <span id="lastUpdated">-</span></span>
+                </div>
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="dlabel">Total Udhari DI</span><span class="dvalue" id="detDi">0</span></div>
+                    <div class="detail-item"><span class="dlabel">Total Udhari LI</span><span class="dvalue" id="detLi">0</span></div>
+                    <div class="detail-item"><span class="dlabel">Total Paise Aane</span><span class="dvalue positive" id="detAane">0</span></div>
+                    <div class="detail-item"><span class="dlabel">Total Paise Dene</span><span class="dvalue negative" id="detDene">0</span></div>
+                    <div class="detail-item"><span class="dlabel">Total Interest Earn</span><span class="dvalue positive" id="detInterestEarn">0</span></div>
+                    <div class="detail-item"><span class="dlabel">Total Interest Pay</span><span class="dvalue negative" id="detInterestPay">0</span></div>
+                    <div class="detail-item"><span class="dlabel">Net Position</span><span class="dvalue neutral" id="detNet">0</span></div>
+                    <div class="detail-item"><span class="dlabel">Total Entries</span><span class="dvalue" id="detEntries">0</span></div>
+                </div>
+            </div>
+
+            <div class="panel inline-edit-panel" id="inlineEditPanel" onclick="if (event.target === this) closeInlineEdit()">
+                <div class="inline-edit-shell">
+                <div class="section-title">
+                    <h2><i class="fas fa-edit"></i> Update Entry</h2>
+                    <button class="small-btn" type="button" onclick="closeInlineEdit()">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+
+                <div class="row-2">
+                    <div class="field-group">
+                        <label for="editType">Type</label>
+                        <select id="editType" onchange="updateInlineLabels(); calculateInlineInterest();">
+                            <option value="addUdhariDi">UDHARI DI</option>
+                            <option value="addUdhariLi">UDHARI LI</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label for="editDate">Date</label>
+                        <input type="date" id="editDate" onchange="calculateInlineMonths()" />
+                    </div>
+                </div>
+
+                <div class="row-2">
+                    <div class="field-group">
+                        <label id="editNameLabel" for="editName">Party Name</label>
+                        <input type="text" id="editName" placeholder="Name" />
+                    </div>
+                    <div class="field-group">
+                        <label for="editMobile">Mobile</label>
+                        <input type="tel" id="editMobile" placeholder="98XXXXXXXX" />
+                    </div>
+                </div>
+
+                <div class="row-3">
+                    <div class="field-group">
+                        <label id="editAmountLabel" for="editAmount">Amount</label>
+                        <input type="number" id="editAmount" placeholder="0" oninput="calculateInlineInterest()" />
+                    </div>
+                    <div class="field-group">
+                        <label for="editRate">Rate %</label>
+                        <input type="number" id="editRate" placeholder="2" oninput="calculateInlineInterest()" />
+                    </div>
+                    <div class="field-group">
+                        <label for="editMonth">Months</label>
+                        <input type="number" id="editMonth" placeholder="Auto" readonly />
+                    </div>
+                </div>
+
+                <div class="row-3">
+                    <div class="field-group">
+                        <label for="editTotal">Total</label>
+                        <input type="number" id="editTotal" readonly />
+                    </div>
+                    <div class="field-group">
+                        <label id="editPaidLabel" for="editPaid">Received/Paid</label>
+                        <input type="number" id="editPaid" placeholder="0" oninput="calculateInlineBalance()" />
+                    </div>
+                    <div class="field-group">
+                        <label for="editBalance">Balance</label>
+                        <input type="number" id="editBalance" readonly />
+                    </div>
+                </div>
+
+                <div class="row-2">
+                    <div class="field-group">
+                        <label for="editStatus">Status</label>
+                        <select id="editStatus">
+                            <option value="Pending">Pending</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label for="editRemarks">Remarks</label>
+                        <input type="text" id="editRemarks" placeholder="Optional" />
+                    </div>
+                </div>
+
+                <input type="hidden" id="editInterest" />
+                <div class="inline-edit-actions">
+                    <button class="btn-save" type="button" onclick="saveInlineUpdate()" id="inlineUpdateBtn">
+                        <i class="fas fa-save"></i> UPDATE
+                    </button>
+                    <button class="small-btn" type="button" onclick="closeInlineEdit()">
+                        Cancel
+                    </button>
+                </div>
+                <div id="inlineEditMsg" class="status-msg"></div>
+                </div>
+            </div>
+
+            <div class="panel ledger-panel" id="ledgerPanel" onclick="if (event.target === this) closeLedger()">
+                <div class="ledger-shell">
+                    <div class="section-title">
+                        <h2><i class="fas fa-address-book"></i> Ledger: <span id="ledgerTitle">-</span></h2>
+                        <div class="actions reminder-actions" id="ledgerReminderActions"></div>
+                        <button class="small-btn" type="button" onclick="closeLedger()">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                    <div class="ledger-summary">
+                        <div class="mini-stat"><span>Total DI</span><strong id="ledgerDi">0</strong></div>
+                        <div class="mini-stat"><span>Total LI</span><strong id="ledgerLi">0</strong></div>
+                        <div class="mini-stat"><span>Balance</span><strong id="ledgerBalance">0</strong></div>
+                        <div class="mini-stat"><span>Entries</span><strong id="ledgerEntries">0</strong></div>
+                    </div>
+                    <div class="table-wrap" id="ledgerTable"></div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="section-title">
+                    <h2><i class="fas fa-list"></i> All Transactions</h2>
+                    <div class="actions">
+                        <button class="small-btn" type="button" onclick="loadTransactions(true)">
+                            <i class="fas fa-sync-alt"></i> Load
+                        </button>
+                        <button class="small-btn" type="button" onclick="downloadExcelReport()">
+                            <i class="fas fa-file-excel"></i> Excel Report
+                        </button>
+                    </div>
+                </div>
+                <div class="toolbar">
+                    <input class="search-input" id="transactionSearch" type="search" placeholder="Name, mobile, remarks search karein" oninput="renderTransactions()" />
+                    <select class="search-input" id="typeFilter" onchange="renderTransactions()">
+                        <option value="">All Types</option>
+                        <option value="addUdhariDi">UDHARI DI</option>
+                        <option value="addUdhariLi">UDHARI LI</option>
+                    </select>
+                    <select class="search-input" id="statusFilter" onchange="renderTransactions()">
+                        <option value="">All Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                    <button class="small-btn" type="button" onclick="clearFilters()">
+                        <i class="fas fa-filter"></i> Clear
+                    </button>
+                </div>
+                <div class="table-wrap" id="transactionsTable">
+                    <div class="empty-state">Transactions load karne ke liye Refresh ya Load dabayein.</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const state = {
+            entries: [],
+            editingKey: "",
+            inlineEditingKey: "",
+            lastDashboard: null,
+            ledgerKey: "",
+            backendRowsAvailable: false
+        };
+        const LOCAL_ENTRIES_KEY = "udhariKhataLocalEntriesV1";
+
+        function getWebAppUrl() {
+            return document.getElementById("webAppUrl").value.trim();
+        }
+
+        function showView(view) {
+            document.getElementById("entryView").classList.toggle("active", view === "entry");
+            document.getElementById("dashboardView").classList.toggle("active", view === "dashboard");
+            document.getElementById("entryNav").classList.toggle("active", view === "entry");
+            document.getElementById("dashboardNav").classList.toggle("active", view === "dashboard");
+            if (view === "dashboard") {
+                renderTransactions();
+            }
+        }
+
+        function formatMoney(value) {
+            const amount = Number(value) || 0;
+            return amount.toLocaleString("en-IN", { maximumFractionDigits: 2 });
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, (ch) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;"
+            }[ch]));
+        }
+
+        function normalizeKey(key) {
+            return String(key || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        }
+
+        function pick(raw, keys) {
+            if (!raw || typeof raw !== "object") return "";
+            const normalized = {};
+            Object.keys(raw).forEach((key) => {
+                normalized[normalizeKey(key)] = raw[key];
+            });
+            for (const key of keys) {
+                const exact = raw[key];
+                if (exact !== undefined && exact !== null && exact !== "") return exact;
+                const match = normalized[normalizeKey(key)];
+                if (match !== undefined && match !== null && match !== "") return match;
+            }
+            return "";
+        }
+
+        function detectAction(raw) {
+            const rawType = String(pick(raw, ["action", "type", "transactionType", "sheet", "category"]) || "").toLowerCase();
+            if (rawType.includes("li") || rawType.includes("dene") || rawType.includes("pay")) return "addUdhariLi";
+            return "addUdhariDi";
+        }
+
+        function normalizeEntry(raw, index) {
+            const action = detectAction(raw);
+            const srNo = String(pick(raw, ["srNo", "sr no", "serial", "id", "entryId", "timestamp"]) || "");
+            const mobile = String(pick(raw, ["mobile", "phone", "mobileNo", "mobile no", "contact"]) || "").trim();
+            const name = String(pick(raw, ["name", "partyName", "party name", "lenderName", "lender name"]) || "").trim();
+            return {
+                key: srNo || String(index + 1),
+                srNo: srNo || String(index + 1),
+                date: String(pick(raw, ["date", "entryDate"]) || ""),
+                name,
+                mobile,
+                action,
+                amount: Number(pick(raw, ["amount", "principal", "amountDiya", "amountLiya"])) || 0,
+                interestRate: Number(pick(raw, ["interestRate", "rate", "rate %", "monthlyRate"])) || 0,
+                duration: Number(pick(raw, ["duration", "month", "months"])) || 0,
+                interestAmount: Number(pick(raw, ["interestAmount", "interest"])) || 0,
+                totalAmount: Number(pick(raw, ["totalAmount", "total"])) || 0,
+                paidAmount: Number(pick(raw, ["paidAmount", "paid", "received", "receivedPaid"])) || 0,
+                balance: Number(pick(raw, ["balance", "remaining", "due"])) || 0,
+                status: String(pick(raw, ["status"]) || "Pending"),
+                remarks: String(pick(raw, ["remarks", "remark", "note"]) || "")
+            };
+        }
+
+        function extractRows(data) {
+            if (Array.isArray(data)) return data;
+            if (!data || typeof data !== "object") return [];
+            const candidates = [
+                data.transactions,
+                data.entries,
+                data.records,
+                data.rows,
+                data.allTransactions,
+                data.data,
+                data.data && data.data.transactions,
+                data.data && data.data.entries,
+                data.data && data.data.rows
+            ];
+            for (const item of candidates) {
+                if (Array.isArray(item)) return item;
+            }
+            return [];
+        }
+
+        function setEntries(rows) {
+            state.entries = rows.map((row, index) => normalizeEntry(row, index));
+            renderTransactions();
+            renderPartySuggestions();
+            updateDashboardUI(computeDashboard(state.entries));
+        }
+
+        function loadCachedEntries() {
+            try {
+                const cached = JSON.parse(localStorage.getItem(LOCAL_ENTRIES_KEY) || "[]");
+                if (Array.isArray(cached) && cached.length && !state.entries.length) {
+                    setEntries(cached);
+                }
+            } catch (err) {
+                console.warn("Local transaction cache read error:", err);
+            }
+        }
+
+        function saveCachedEntries() {
+            try {
+                localStorage.setItem(LOCAL_ENTRIES_KEY, JSON.stringify(state.entries));
+            } catch (err) {
+                console.warn("Local transaction cache save error:", err);
+            }
+        }
+
+        function upsertCachedEntry(rawData, action) {
+            const entry = normalizeEntry(Object.assign({}, rawData, { action }), state.entries.length);
+            const idx = state.entries.findIndex((item) => item.srNo === entry.srNo || item.key === entry.key);
+            if (idx >= 0) {
+                state.entries[idx] = entry;
+            } else {
+                state.entries.unshift(entry);
+            }
+            saveCachedEntries();
+            renderTransactions();
+            renderPartySuggestions();
+        }
+
+        async function apiGet(action, params = {}) {
+            const url = getWebAppUrl();
+            if (!url) throw new Error("Enter Web App URL.");
+            const qs = new URLSearchParams({ action, ...params });
+            const resp = await fetch(url + "?" + qs.toString(), { method: "GET", mode: "cors" });
+            if (!resp.ok) throw new Error("HTTP " + resp.status);
+            return resp.json();
+        }
+
+        async function apiPost(payload) {
+            const url = getWebAppUrl();
+            if (!url) throw new Error("Enter Web App URL.");
+            const resp = await fetch(url, {
+                method: "POST",
+                mode: "cors",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(payload)
+            });
+            if (!resp.ok) {
+                const txt = await resp.text();
+                throw new Error("HTTP " + resp.status + ": " + txt.slice(0, 150));
+            }
+            return resp.json();
+        }
+
+        async function testConnection() {
+            const resultDiv = document.getElementById("testResult");
+            resultDiv.innerHTML = '<span style="color:#0c5460;">Testing...</span>';
+            try {
+                const data = await apiGet("dashboard");
+                if (data && data.status === "success") {
+                    resultDiv.innerHTML = '<span style="color:#0a6b33;">Connected</span>';
+                    await refreshAll();
+                } else {
+                    resultDiv.innerHTML = '<span style="color:#a61e1e;">Check response</span>';
+                }
+            } catch (err) {
+                resultDiv.innerHTML = '<span style="color:#a61e1e;">' + escapeHtml(err.message) + "</span>";
+            }
+        }
+
+        async function refreshAll() {
+            await loadDashboard();
+            await loadTransactions(false);
+        }
+
+        async function loadDashboard() {
+            try {
+                const data = await apiGet("dashboard");
+                state.lastDashboard = data;
+                updateDashboardUI(data);
+                const rows = extractRows(data);
+                if (rows.length) setEntries(rows);
+                document.getElementById("lastUpdated").textContent = new Date().toLocaleString("en-IN");
+            } catch (err) {
+                console.warn("Dashboard load error:", err);
+            }
+        }
+
+        async function loadTransactions(showMessage) {
+            const actions = ["transactions", "allTransactions", "getTransactions", "getAllEntries", "getAll"];
+            let lastResponse = null;
+            try {
+                for (const action of actions) {
+                    const data = await apiGet(action);
+                    lastResponse = data;
+                    const rows = extractRows(data);
+                    if (rows.length) {
+                        state.backendRowsAvailable = true;
+                        setEntries(rows);
+                        saveCachedEntries();
+                        document.getElementById("lastUpdated").textContent = new Date().toLocaleString("en-IN");
+                        return;
+                    }
+                }
+
+                state.backendRowsAvailable = false;
+                loadCachedEntries();
+                if (showMessage || !state.entries.length) {
+                    document.getElementById("transactionsTable").innerHTML =
+                        '<div class="empty-state">Google Sheet ke purane transactions lane ke liye Apps Script me <strong>action=transactions</strong> add karna hoga. Abhi backend response rows nahi bhej raha; response: ' +
+                        escapeHtml(JSON.stringify(lastResponse || {}).slice(0, 120)) +
+                        "</div>";
+                }
+            } catch (err) {
+                loadCachedEntries();
+                if (showMessage) {
+                    document.getElementById("transactionsTable").innerHTML = '<div class="empty-state">Transactions load nahi hue: ' + escapeHtml(err.message) + "</div>";
+                }
+            }
+        }
+
+        function computeDashboard(entries) {
+            const totals = {
+                status: "success",
+                totalUdhariDi: 0,
+                totalUdhariLi: 0,
+                totalPaiseAaneHain: 0,
+                totalPaiseDeneHain: 0,
+                totalInterestEarn: 0,
+                totalInterestPay: 0,
+                netPosition: 0,
+                totalEntries: entries.length
+            };
+            entries.forEach((entry) => {
+                if (entry.action === "addUdhariLi") {
+                    totals.totalUdhariLi += entry.amount;
+                    totals.totalPaiseDeneHain += entry.balance || entry.totalAmount;
+                    totals.totalInterestPay += entry.interestAmount;
+                } else {
+                    totals.totalUdhariDi += entry.amount;
+                    totals.totalPaiseAaneHain += entry.balance || entry.totalAmount;
+                    totals.totalInterestEarn += entry.interestAmount;
+                }
+            });
+            totals.netPosition = totals.totalPaiseAaneHain - totals.totalPaiseDeneHain;
+            return totals;
+        }
+
+        function updateDashboardUI(data) {
+            const d = Object.assign(computeDashboard(state.entries), data || {});
+            const net = Number(d.netPosition) || 0;
+            document.getElementById("cardDi").textContent = formatMoney(d.totalUdhariDi);
+            document.getElementById("cardLi").textContent = formatMoney(d.totalUdhariLi);
+            document.getElementById("cardAane").textContent = formatMoney(d.totalPaiseAaneHain);
+            document.getElementById("cardDene").textContent = formatMoney(d.totalPaiseDeneHain);
+            document.getElementById("cardInterestEarn").textContent = formatMoney(d.totalInterestEarn);
+            document.getElementById("cardInterestPay").textContent = formatMoney(d.totalInterestPay);
+
+            const netEl = document.getElementById("cardNet");
+            netEl.innerHTML = '<i class="fas fa-balance-scale"></i>' + formatMoney(net);
+            netEl.style.color = net > 0 ? "#0a8f45" : net < 0 ? "#ef4444" : "#f59e0b";
+
+            document.getElementById("detDi").textContent = formatMoney(d.totalUdhariDi);
+            document.getElementById("detLi").textContent = formatMoney(d.totalUdhariLi);
+            document.getElementById("detAane").textContent = formatMoney(d.totalPaiseAaneHain);
+            document.getElementById("detDene").textContent = formatMoney(d.totalPaiseDeneHain);
+            document.getElementById("detInterestEarn").textContent = formatMoney(d.totalInterestEarn);
+            document.getElementById("detInterestPay").textContent = formatMoney(d.totalInterestPay);
+            document.getElementById("detNet").textContent = formatMoney(net);
+            document.getElementById("detNet").className = "dvalue " + (net > 0 ? "positive" : net < 0 ? "negative" : "neutral");
+            document.getElementById("detEntries").textContent = d.totalEntries || state.entries.length || 0;
+        }
+
+        function updateLabels() {
+            const isDi = document.getElementById("type").value === "addUdhariDi";
+            document.getElementById("nameLabel").textContent = isDi ? "Party Name" : "Lender Name";
+            document.getElementById("amountLabel").textContent = isDi ? "Amount Diya" : "Amount Liya";
+            document.getElementById("interestLabel").textContent = "Interest Amount";
+            document.getElementById("totalLabel").textContent = isDi ? "Total Receive" : "Total Pay";
+            document.getElementById("paidLabel").textContent = isDi ? "Received" : "Paid";
+            document.getElementById("balanceLabel").textContent = isDi ? "Balance" : "Remaining";
+            calculateInterest();
+        }
+
+        function calculateInterest() {
+            const amt = Number(document.getElementById("amount").value) || 0;
+            const rate = Number(document.getElementById("rate").value) || 0;
+            const mon = Number(document.getElementById("month").value) || 0;
+            const interest = (amt * rate * mon) / 100;
+            document.getElementById("interest").value = interest.toFixed(2);
+            document.getElementById("total").value = (amt + interest).toFixed(2);
+            calculateBalance();
+        }
+
+        function calculateMonths() {
+            const dateInput = document.getElementById("date").value;
+            if (!dateInput) {
+                document.getElementById("month").value = "";
+                calculateInterest();
+                return;
+            }
+
+            const entryDate = new Date(dateInput);
+            const currentDate = new Date();
+            let months = (currentDate.getFullYear() - entryDate.getFullYear()) * 12;
+            months += currentDate.getMonth() - entryDate.getMonth();
+
+            if (months < 0) months = 0;
+            const daysDiff = Math.floor((currentDate - entryDate) / (1000 * 60 * 60 * 24));
+            if (daysDiff > 0 && daysDiff < 15 && months === 0) months = 0.5;
+            if (daysDiff >= 15 && months === 0) months = 1;
+
+            document.getElementById("month").value = months > 0 ? months : 0;
+            calculateInterest();
+        }
+
+        function calculateBalance() {
+            const total = Number(document.getElementById("total").value) || 0;
+            const paid = Number(document.getElementById("paid").value) || 0;
+            document.getElementById("balance").value = (total - paid).toFixed(2);
+        }
+
+        function showStatus(msg, type) {
+            const el = document.getElementById("statusMsg");
+            el.textContent = msg;
+            el.className = "status-msg " + type;
+            clearTimeout(window._statusTimer);
+            window._statusTimer = setTimeout(() => { el.className = "status-msg"; }, 8000);
+        }
+
+        function validateForm() {
+            const name = document.getElementById("name").value.trim();
+            const amt = Number(document.getElementById("amount").value);
+            if (!name) {
+                showStatus("Enter name.", "error");
+                return false;
+            }
+            if (!amt || amt <= 0) {
+                showStatus("Enter valid amount.", "error");
+                return false;
+            }
+            return true;
+        }
+
+        function collectFormData() {
+            return {
+                srNo: state.editingKey || String(Date.now()),
+                date: document.getElementById("date").value,
+                name: document.getElementById("name").value.trim(),
+                mobile: document.getElementById("mobile").value.trim(),
+                amount: document.getElementById("amount").value || "0",
+                interestRate: document.getElementById("rate").value || "0",
+                duration: document.getElementById("month").value || "0",
+                interestAmount: document.getElementById("interest").value || "0",
+                totalAmount: document.getElementById("total").value || "0",
+                paidAmount: document.getElementById("paid").value || "0",
+                balance: document.getElementById("balance").value || "0",
+                status: document.getElementById("status").value,
+                remarks: document.getElementById("remarks").value.trim()
+            };
+        }
+
+        async function saveData() {
+            if (!validateForm()) return;
+            const btn = document.getElementById("saveBtn");
+            const isEdit = Boolean(state.editingKey);
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + (isEdit ? "Updating..." : "Saving...");
+
+            const payload = {
+                action: isEdit ? "updateEntry" : document.getElementById("type").value,
+                data: collectFormData()
+            };
+            payload.data.transactionType = document.getElementById("type").value;
+            payload.data.originalSrNo = state.editingKey || payload.data.srNo;
+
+            try {
+                const result = await apiPost(payload);
+                if (result && result.status === "success") {
+                    upsertCachedEntry(payload.data, payload.data.transactionType);
+                    showStatus(isEdit ? "Entry updated successfully." : (result.message || "Entry saved successfully."), "success");
+                    cancelEdit();
+                    clearEntryForm();
+                    await refreshAll();
+                    showView("dashboard");
+                } else {
+                    throw new Error((result && result.message) || "Unknown error");
+                }
+            } catch (err) {
+                showStatus(err.message + (isEdit ? " (Apps Script me updateEntry action required hai.)" : ""), "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+                updateSaveButton();
+            }
+        }
+
+        function clearEntryForm() {
+            ["name", "mobile", "amount", "rate", "month", "interest", "total", "paid", "balance", "remarks"].forEach((id) => {
+                document.getElementById(id).value = "";
+            });
+            document.getElementById("status").value = "Pending";
+            setDefaultDate();
+            calculateMonths();
+        }
+
+        function updateSaveButton() {
+            const isEdit = Boolean(state.editingKey);
+            document.getElementById("formTitle").innerHTML = isEdit ? '<i class="fas fa-edit"></i> Edit Entry' : '<i class="fas fa-pen-alt"></i> New Entry';
+            document.getElementById("saveBtn").innerHTML = isEdit ? '<i class="fas fa-save"></i> UPDATE ENTRY' : '<i class="fas fa-save"></i> SAVE ENTRY';
+            document.getElementById("cancelEditBtn").style.display = isEdit ? "inline-flex" : "none";
+        }
+
+        function showInlineStatus(msg, type) {
+            const el = document.getElementById("inlineEditMsg");
+            el.textContent = msg;
+            el.className = "status-msg " + type;
+            clearTimeout(window._inlineStatusTimer);
+            window._inlineStatusTimer = setTimeout(() => { el.className = "status-msg"; }, 7000);
+        }
+
+        function updateInlineLabels() {
+            const isDi = document.getElementById("editType").value === "addUdhariDi";
+            document.getElementById("editNameLabel").textContent = isDi ? "Party Name" : "Lender Name";
+            document.getElementById("editAmountLabel").textContent = isDi ? "Amount Diya" : "Amount Liya";
+            document.getElementById("editPaidLabel").textContent = isDi ? "Received" : "Paid";
+        }
+
+        function calculateInlineMonths() {
+            const dateInput = document.getElementById("editDate").value;
+            if (!dateInput) {
+                document.getElementById("editMonth").value = "";
+                calculateInlineInterest();
+                return;
+            }
+
+            const entryDate = new Date(dateInput);
+            const currentDate = new Date();
+            let months = (currentDate.getFullYear() - entryDate.getFullYear()) * 12;
+            months += currentDate.getMonth() - entryDate.getMonth();
+            if (months < 0) months = 0;
+
+            const daysDiff = Math.floor((currentDate - entryDate) / (1000 * 60 * 60 * 24));
+            if (daysDiff > 0 && daysDiff < 15 && months === 0) months = 0.5;
+            if (daysDiff >= 15 && months === 0) months = 1;
+
+            document.getElementById("editMonth").value = months > 0 ? months : 0;
+            calculateInlineInterest();
+        }
+
+        function calculateInlineInterest() {
+            const amt = Number(document.getElementById("editAmount").value) || 0;
+            const rate = Number(document.getElementById("editRate").value) || 0;
+            const mon = Number(document.getElementById("editMonth").value) || 0;
+            const interest = (amt * rate * mon) / 100;
+            document.getElementById("editInterest").value = interest.toFixed(2);
+            document.getElementById("editTotal").value = (amt + interest).toFixed(2);
+            calculateInlineBalance();
+        }
+
+        function calculateInlineBalance() {
+            const total = Number(document.getElementById("editTotal").value) || 0;
+            const paid = Number(document.getElementById("editPaid").value) || 0;
+            document.getElementById("editBalance").value = (total - paid).toFixed(2);
+        }
+
+        function collectInlineEditData() {
+            return {
+                srNo: state.inlineEditingKey || String(Date.now()),
+                originalSrNo: state.inlineEditingKey,
+                transactionType: document.getElementById("editType").value,
+                date: document.getElementById("editDate").value,
+                name: document.getElementById("editName").value.trim(),
+                mobile: document.getElementById("editMobile").value.trim(),
+                amount: document.getElementById("editAmount").value || "0",
+                interestRate: document.getElementById("editRate").value || "0",
+                duration: document.getElementById("editMonth").value || "0",
+                interestAmount: document.getElementById("editInterest").value || "0",
+                totalAmount: document.getElementById("editTotal").value || "0",
+                paidAmount: document.getElementById("editPaid").value || "0",
+                balance: document.getElementById("editBalance").value || "0",
+                status: document.getElementById("editStatus").value,
+                remarks: document.getElementById("editRemarks").value.trim()
+            };
+        }
+
+        function closeInlineEdit() {
+            state.inlineEditingKey = "";
+            document.getElementById("inlineEditPanel").classList.remove("active");
+            document.getElementById("inlineEditMsg").className = "status-msg";
+            document.body.style.overflow = "";
+        }
+
+        function closeLedger() {
+            state.ledgerKey = "";
+            document.getElementById("ledgerPanel").classList.remove("active");
+            document.body.style.overflow = "";
+        }
+
+        async function deleteEntry(key) {
+            const entry = state.entries.find((item) => item.key === key || item.srNo === key);
+            if (!entry) return;
+            if (!confirm(`Delete ${entry.name || "this entry"}?`)) return;
+
+            try {
+                const result = await apiPost({
+                    action: "deleteEntry",
+                    data: {
+                        originalSrNo: entry.srNo || entry.key,
+                        transactionType: entry.action
+                    }
+                });
+                if (result && result.status === "success") {
+                    state.entries = state.entries.filter((item) => item.key !== key && item.srNo !== key);
+                    saveCachedEntries();
+                    renderTransactions();
+                    renderPartySuggestions();
+                    closeLedger();
+                    showStatus("Entry deleted successfully.", "success");
+                    await refreshAll();
+                } else {
+                    throw new Error((result && result.message) || "Delete failed");
+                }
+            } catch (err) {
+                showStatus("Delete failed: " + err.message, "error");
+            }
+        }
+
+        async function saveInlineUpdate() {
+            const data = collectInlineEditData();
+            if (!data.name) {
+                showInlineStatus("Enter name.", "error");
+                return;
+            }
+            if (!Number(data.amount)) {
+                showInlineStatus("Enter valid amount.", "error");
+                return;
+            }
+
+            const btn = document.getElementById("inlineUpdateBtn");
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+            try {
+                const result = await apiPost({ action: "updateEntry", data });
+                if (result && result.status === "success") {
+                    upsertCachedEntry(data, data.transactionType);
+                    showInlineStatus("Entry updated successfully.", "success");
+                    await refreshAll();
+                    renderTransactions();
+                } else {
+                    throw new Error((result && result.message) || "Unknown error");
+                }
+            } catch (err) {
+                showInlineStatus(err.message + " (Apps Script deploy update check karein.)", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        }
+
+        function editEntry(key) {
+            const entry = state.entries.find((item) => item.key === key || item.srNo === key);
+            if (!entry) return;
+            state.inlineEditingKey = entry.srNo || entry.key;
+            document.getElementById("editType").value = entry.action;
+            document.getElementById("editDate").value = normalizeDate(entry.date) || new Date().toISOString().split("T")[0];
+            document.getElementById("editName").value = entry.name;
+            document.getElementById("editMobile").value = entry.mobile;
+            document.getElementById("editAmount").value = entry.amount;
+            document.getElementById("editRate").value = entry.interestRate;
+            document.getElementById("editMonth").value = entry.duration;
+            document.getElementById("editInterest").value = entry.interestAmount;
+            document.getElementById("editTotal").value = entry.totalAmount;
+            document.getElementById("editPaid").value = entry.paidAmount;
+            document.getElementById("editBalance").value = entry.balance;
+            document.getElementById("editStatus").value = entry.status || "Pending";
+            document.getElementById("editRemarks").value = entry.remarks;
+            updateInlineLabels();
+            document.getElementById("inlineEditPanel").classList.add("active");
+            document.body.style.overflow = "hidden";
+            showView("dashboard");
+        }
+
+        function cancelEdit() {
+            state.editingKey = "";
+            updateSaveButton();
+        }
+
+        function normalizeDate(value) {
+            if (!value) return "";
+            if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+            const dt = new Date(value);
+            if (Number.isNaN(dt.getTime())) return "";
+            return dt.toISOString().split("T")[0];
+        }
+
+        function filteredEntries() {
+            const term = document.getElementById("transactionSearch").value.trim().toLowerCase();
+            const type = document.getElementById("typeFilter").value;
+            const status = document.getElementById("statusFilter").value;
+            return state.entries.filter((entry) => {
+                const haystack = [entry.name, entry.mobile, entry.remarks, entry.date, entry.srNo].join(" ").toLowerCase();
+                return (!term || haystack.includes(term)) &&
+                    (!type || entry.action === type) &&
+                    (!status || entry.status === status);
+            });
+        }
+
+        function renderTransactions() {
+            const wrap = document.getElementById("transactionsTable");
+            const rows = filteredEntries();
+            if (!state.entries.length) {
+                wrap.innerHTML = '<div class="empty-state">Purane Google Sheet transactions abhi nahi aa rahe, kyunki Apps Script rows return nahi kar raha. Backend me <strong>action=transactions</strong> add karna padega.</div>';
+                return;
+            }
+            if (!rows.length) {
+                wrap.innerHTML = '<div class="empty-state">Filter ke hisab se koi transaction nahi mila.</div>';
+                return;
+            }
+            wrap.innerHTML = renderEntryTable(rows, true);
+        }
+
+        function renderEntryTable(rows, showActions) {
+            const body = rows.map((entry) => {
+                const isLi = entry.action === "addUdhariLi";
+                const typeLabel = isLi ? "UDHARI LI" : "UDHARI DI";
+                const statusClass = String(entry.status).toLowerCase() === "completed" ? "completed" : "pending";
+                return `<tr>
+                    <td>${escapeHtml(entry.date || "-")}</td>
+                    <td><button class="text-link" type="button" data-ledger="${escapeHtml(entry.key)}">${escapeHtml(entry.name || "-")}</button></td>
+                    <td><button class="text-link" type="button" data-ledger="${escapeHtml(entry.key)}">${escapeHtml(entry.mobile || "-")}</button></td>
+                    <td><span class="pill ${isLi ? "li" : ""}">${typeLabel}</span></td>
+                    <td>${formatMoney(entry.amount)}</td>
+                    <td>${formatMoney(entry.totalAmount)}</td>
+                    <td>${formatMoney(entry.paidAmount)}</td>
+                    <td><strong>${formatMoney(entry.balance)}</strong></td>
+                    <td><span class="pill ${statusClass}">${escapeHtml(entry.status || "Pending")}</span></td>
+                    <td>${escapeHtml(entry.remarks || "")}</td>
+                    ${showActions ? `<td><div class="actions">
+                        <button class="icon-btn" title="Edit" type="button" data-edit="${escapeHtml(entry.key)}" onclick="editEntry('${escapeHtml(entry.key)}')"><i class="fas fa-edit"></i></button>
+                        <button class="icon-btn danger" title="Delete" type="button" data-delete="${escapeHtml(entry.key)}" onclick="deleteEntry('${escapeHtml(entry.key)}')"><i class="fas fa-trash"></i></button>
+                        ${renderReminderActions(entry)}
+                    </div></td>` : ""}
+                </tr>`;
+            }).join("");
+            return `<table>
+                <thead>
+                    <tr>
+                        <th>Date</th><th>Name</th><th>Mobile</th><th>Type</th><th>Amount</th><th>Total</th><th>Paid</th><th>Balance</th><th>Status</th><th>Remarks</th>${showActions ? "<th>Actions</th>" : ""}
+                    </tr>
+                </thead>
+                <tbody>${body}</tbody>
+            </table>`;
+        }
+
+        function clearFilters() {
+            document.getElementById("transactionSearch").value = "";
+            document.getElementById("typeFilter").value = "";
+            document.getElementById("statusFilter").value = "";
+            renderTransactions();
+        }
+
+        function getExportRows() {
+            const rows = filteredEntries();
+            return rows.length ? rows : state.entries;
+        }
+
+        function buildExcelReportHtml(rows) {
+            const headers = ["Date", "Name", "Mobile", "Type", "Amount", "Total", "Paid", "Balance", "Status", "Remarks"];
+            const body = rows.map((entry) => {
+                const typeLabel = entry.action === "addUdhariLi" ? "UDHARI LI" : "UDHARI DI";
+                return `<tr>
+                    <td>${escapeHtml(entry.date || "-")}</td>
+                    <td>${escapeHtml(entry.name || "-")}</td>
+                    <td>${escapeHtml(entry.mobile || "-")}</td>
+                    <td>${escapeHtml(typeLabel)}</td>
+                    <td>${escapeHtml(formatMoney(entry.amount))}</td>
+                    <td>${escapeHtml(formatMoney(entry.totalAmount))}</td>
+                    <td>${escapeHtml(formatMoney(entry.paidAmount))}</td>
+                    <td>${escapeHtml(formatMoney(entry.balance))}</td>
+                    <td>${escapeHtml(entry.status || "Pending")}</td>
+                    <td>${escapeHtml(entry.remarks || "")}</td>
+                </tr>`;
+            }).join("");
+            return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+body{font-family:Segoe UI,Arial,sans-serif;font-size:12px;color:#111;}
+table{border-collapse:collapse;width:100%;}
+th,td{border:1px solid #999;padding:6px 8px;text-align:left;vertical-align:top;}
+th{background:#e9f3ee;}
+</style>
+</head>
+<body>
+<h2>Udhari Khata Report</h2>
+<table>
+<thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}</tr></thead>
+<tbody>${body}</tbody>
+</table>
+</body>
+</html>`;
+        }
+
+        function downloadExcelReport() {
+            const rows = getExportRows();
+            if (!rows.length) {
+                alert("Download ke liye koi transaction nahi mila.");
+                return;
+            }
+            const blob = new Blob(["\ufeff", buildExcelReportHtml(rows)], { type: "application/vnd.ms-excel;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `udhari-khata-report-${new Date().toISOString().slice(0, 10)}.xls`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+
+        function partyKey(entry) {
+            const mobile = cleanMobile(entry.mobile);
+            return mobile || entry.name.toLowerCase();
+        }
+
+        function groupParties() {
+            const map = new Map();
+            state.entries.forEach((entry) => {
+                const key = partyKey(entry);
+                if (!key) return;
+                if (!map.has(key)) {
+                    map.set(key, {
+                        key,
+                        name: entry.name,
+                        mobile: entry.mobile,
+                        entries: [],
+                        balance: 0
+                    });
+                }
+                const party = map.get(key);
+                party.entries.push(entry);
+                party.balance += entry.action === "addUdhariLi" ? -Number(entry.balance || 0) : Number(entry.balance || 0);
+                if (!party.mobile && entry.mobile) party.mobile = entry.mobile;
+                if (!party.name && entry.name) party.name = entry.name;
+            });
+            return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        function renderPartySuggestions() {
+            const wrap = document.querySelector("[data-party-suggestions]");
+            if (!wrap) return;
+            const searchEl = document.querySelector("[data-quick-ledger-search]");
+            const term = searchEl ? searchEl.value.trim().toLowerCase() : "";
+            const parties = groupParties().filter((party) => {
+                const haystack = [party.name, party.mobile].join(" ").toLowerCase();
+                return !term || haystack.includes(term);
+            }).slice(0, 8);
+
+            if (!parties.length) {
+                wrap.innerHTML = '<div class="empty-state">Koi party nahi mili.</div>';
+                return;
+            }
+
+            wrap.innerHTML = `<table style="min-width:520px;">
+                <thead><tr><th>Name</th><th>Mobile</th><th>Balance</th><th>Action</th></tr></thead>
+                <tbody>${parties.map((party) => `<tr>
+                    <td><button class="text-link" type="button" data-party="${escapeHtml(party.key)}">${escapeHtml(party.name || "-")}</button></td>
+                    <td><button class="text-link" type="button" data-party="${escapeHtml(party.key)}">${escapeHtml(party.mobile || "-")}</button></td>
+                    <td><strong class="${party.balance >= 0 ? "positive" : "negative"}">${formatMoney(party.balance)}</strong></td>
+                    <td><button class="small-btn" type="button" data-party="${escapeHtml(party.key)}"><i class="fas fa-book-open"></i> Ledger</button></td>
+                </tr>`).join("")}</tbody>
+            </table>`;
+        }
+
+        function openLedgerByEntry(key) {
+            const entry = state.entries.find((item) => item.key === key || item.srNo === key);
+            if (entry) openLedgerByParty(partyKey(entry));
+        }
+
+        function openLedgerByParty(key) {
+            const party = groupParties().find((item) => item.key === key);
+            if (!party) return;
+            closeInlineEdit();
+            state.ledgerKey = key;
+            const rows = party.entries;
+            const totalDi = rows.filter((entry) => entry.action === "addUdhariDi").reduce((sum, entry) => sum + Number(entry.balance || 0), 0);
+            const totalLi = rows.filter((entry) => entry.action === "addUdhariLi").reduce((sum, entry) => sum + Number(entry.balance || 0), 0);
+            const net = totalDi - totalLi;
+
+            document.getElementById("ledgerTitle").textContent = (party.name || "Party") + (party.mobile ? " / " + party.mobile : "");
+            document.getElementById("ledgerDi").textContent = formatMoney(totalDi);
+            document.getElementById("ledgerLi").textContent = formatMoney(totalLi);
+            document.getElementById("ledgerBalance").textContent = formatMoney(net);
+            document.getElementById("ledgerBalance").className = net >= 0 ? "positive" : "negative";
+            document.getElementById("ledgerEntries").textContent = rows.length;
+            document.getElementById("ledgerReminderActions").innerHTML = renderReminderActions({
+                name: party.name,
+                mobile: party.mobile,
+                balance: Math.abs(net),
+                action: net < 0 ? "addUdhariLi" : "addUdhariDi"
+            });
+            document.getElementById("ledgerTable").innerHTML = renderEntryTable(rows, true);
+            document.getElementById("ledgerPanel").classList.add("active");
+            document.body.style.overflow = "hidden";
+            showView("dashboard");
+        }
+
+        function cleanMobile(mobile) {
+            return String(mobile || "").replace(/\D/g, "");
+        }
+
+        function phoneForLinks(mobile) {
+            const digits = cleanMobile(mobile);
+            if (!digits) return "";
+            if (digits.length === 10) return "91" + digits;
+            return digits;
+        }
+
+        function reminderMessage(entry) {
+            const name = entry.name || "ji";
+            const balance = formatMoney(entry.balance || 0);
+            const direction = entry.action === "addUdhariLi" ? "payment dena baki hai" : "payment receive karna baki hai";
+            return `Namaste ${name}, Udhari Khata reminder: Rs ${balance} ${direction}. Kripya update kar dein.`;
+        }
+
+        function renderReminderActions(entry) {
+            const phone = phoneForLinks(entry.mobile);
+            if (!phone) {
+                return '<button class="icon-btn" title="Mobile number missing" type="button" disabled><i class="fas fa-bell"></i></button>';
+            }
+            const text = encodeURIComponent(reminderMessage(entry));
+            return `<span class="actions reminder-actions">
+                <a class="icon-btn" title="Call Reminder" href="tel:+${phone}"><i class="fas fa-phone"></i></a>
+                <a class="icon-btn" title="SMS Reminder" href="sms:+${phone}?&body=${text}"><i class="fas fa-sms"></i></a>
+                <a class="icon-btn" title="WhatsApp Reminder" href="https://wa.me/${phone}?text=${text}" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+            </span>`;
+        }
+
+        document.addEventListener("click", (event) => {
+            const ledgerBtn = event.target.closest("[data-ledger]");
+            if (ledgerBtn) {
+                openLedgerByEntry(ledgerBtn.getAttribute("data-ledger"));
+                return;
+            }
+            const partyBtn = event.target.closest("[data-party]");
+            if (partyBtn) {
+                openLedgerByParty(partyBtn.getAttribute("data-party"));
+            }
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                e.preventDefault();
+                if (document.getElementById("inlineEditPanel").classList.contains("active")) {
+                    saveInlineUpdate();
+                } else {
+                    saveData();
+                }
+            }
+        });
+
+        function setDefaultDate() {
+            document.getElementById("date").value = new Date().toISOString().split("T")[0];
+        }
+
+        setDefaultDate();
+        calculateMonths();
+        updateLabels();
+        updateSaveButton();
+        loadCachedEntries();
+        showView("dashboard");
+        setTimeout(refreshAll, 500);
+        setInterval(refreshAll, 60000);
+    </script>
+</body>
+</html>
