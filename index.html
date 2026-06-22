@@ -20,6 +20,224 @@
             min-height: 100vh;
         }
 
+        body:not(.authed) .app-wrapper {
+            display: none;
+        }
+
+        body.authed .auth-screen {
+            display: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .auth-screen {
+            min-height: calc(100vh - 44px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-shell {
+            width: 100%;
+            max-width: 1180px;
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+            gap: 18px;
+            align-items: stretch;
+        }
+
+        .auth-panel,
+        .auth-note,
+        .admin-panel {
+            background: #fff;
+            border: 1px solid #e4ecf2;
+            box-shadow: 0 4px 18px rgba(17, 42, 57, 0.05);
+            border-radius: 8px;
+            padding: 22px;
+        }
+
+        .auth-brand {
+            font-size: 30px;
+            font-weight: 900;
+            color: #0b2b3b;
+            letter-spacing: 0;
+            margin-bottom: 8px;
+        }
+
+        .auth-brand i {
+            color: #0a8f45;
+            margin-right: 8px;
+        }
+
+        .auth-copy {
+            color: #567182;
+            line-height: 1.55;
+            margin-bottom: 18px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .auth-tab {
+            border: 1px solid #d9e2ea;
+            background: #fff;
+            color: #183847;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+            padding: 9px 12px;
+        }
+
+        .auth-tab.active {
+            background: #0a8f45;
+            color: #fff;
+            border-color: #0a8f45;
+        }
+
+        .auth-panel-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .auth-panel-grid .field-group,
+        .auth-panel-grid .row-2,
+        .auth-panel-grid .row-3 {
+            margin-bottom: 0;
+        }
+
+        .auth-panel .btn-save {
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .auth-note h2,
+        .admin-panel h2 {
+            font-size: 19px;
+            margin-bottom: 10px;
+        }
+
+        .auth-note ul {
+            padding-left: 18px;
+            color: #4e6a78;
+            line-height: 1.7;
+        }
+
+        .account-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            border: 1px solid #d9e2ea;
+            background: #fff;
+            padding: 7px 12px;
+            color: #183847;
+            font-weight: 800;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .account-pill strong {
+            color: #0a8f45;
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        .status-chip.pending {
+            background: #fff7e6;
+            color: #a15c00;
+            border-color: #fed7aa;
+        }
+
+        .status-chip.active {
+            background: #e8fff3;
+            color: #0a6b33;
+            border-color: #bbf7d0;
+        }
+
+        .status-chip.inactive {
+            background: #fff1f1;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+
+        .admin-panel {
+            margin-top: 18px;
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-meta,
+        .admin-actions,
+        .admin-head {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .admin-head {
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .admin-card {
+            border: 1px solid #e4ecf2;
+            border-radius: 8px;
+            padding: 14px;
+            background: #fbfdfe;
+        }
+
+        .admin-card h3 {
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .admin-card .table-wrap {
+            max-height: 320px;
+            overflow: auto;
+        }
+
+        .admin-card .empty-state {
+            margin: 0;
+        }
+
+        .owner-switcher {
+            min-width: 220px;
+            max-width: 100%;
+        }
+
+        .mini-muted {
+            color: #67808d;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
         .app-wrapper {
             max-width: 1240px;
             margin: 0 auto;
@@ -686,6 +904,21 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
+            .auth-shell,
+            .auth-panel-grid,
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-head {
+                align-items: stretch;
+            }
+
+            .owner-switcher {
+                min-width: 0;
+                width: 100%;
+            }
+
             .stat-card .value {
                 font-size: 19px;
             }
@@ -693,10 +926,77 @@
     </style>
 </head>
 <body>
+    <main class="auth-screen" id="authScreen">
+        <div class="auth-shell">
+            <section class="auth-panel">
+                <div class="auth-brand"><i class="fas fa-book"></i>UDHARI KHATA</div>
+                <div class="auth-copy">Login ke baad har user ko sirf usi ka data dikhega. Naya user pehle request bhejega, phir admin approve karega.</div>
+                <div class="auth-tabs">
+                    <button class="auth-tab active" type="button" id="authLoginTab" onclick="toggleAuthMode('login')">Login</button>
+                    <button class="auth-tab" type="button" id="authRequestTab" onclick="toggleAuthMode('request')">Request Access</button>
+                </div>
+                <div id="authLoginPanel">
+                    <div class="auth-panel-grid">
+                        <div class="field-group">
+                            <label for="loginUsername">Username</label>
+                            <input type="text" id="loginUsername" placeholder="Your username" autocomplete="username" />
+                        </div>
+                        <div class="field-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" />
+                        </div>
+                    </div>
+                    <button class="btn-save" type="button" onclick="handleLogin()" id="loginBtn">
+                        <i class="fas fa-right-to-bracket"></i> LOGIN
+                    </button>
+                    <div id="authMsg" class="status-msg"></div>
+                </div>
+                <div id="authRequestPanel" class="hidden">
+                    <div class="auth-panel-grid">
+                        <div class="field-group">
+                            <label for="requestName">Full Name</label>
+                            <input type="text" id="requestName" placeholder="Name" autocomplete="name" />
+                        </div>
+                        <div class="field-group">
+                            <label for="requestUsername">Username</label>
+                            <input type="text" id="requestUsername" placeholder="Choose a username" autocomplete="username" />
+                        </div>
+                        <div class="field-group">
+                            <label for="requestPassword">Password</label>
+                            <input type="password" id="requestPassword" placeholder="Choose a password" autocomplete="new-password" />
+                        </div>
+                        <div class="field-group">
+                            <label for="requestEmail">Email</label>
+                            <input type="email" id="requestEmail" placeholder="you@example.com" autocomplete="email" />
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="requestMobile">Mobile</label>
+                        <input type="tel" id="requestMobile" placeholder="98XXXXXXXX" autocomplete="tel" />
+                    </div>
+                    <button class="btn-save" type="button" onclick="submitAccessRequest()" id="requestBtn">
+                        <i class="fas fa-paper-plane"></i> SEND REQUEST
+                    </button>
+                    <div class="mini-muted" style="margin-top:10px;">Request backend par save hogi, admin email par notification jaayegi, aur mail app ka fallback bhi khul sakta hai.</div>
+                </div>
+            </section>
+            <aside class="auth-note">
+                <h2>Approval Flow</h2>
+                <ul>
+                    <li>Naya user pehle request bhejega.</li>
+                    <li>Admin approve karne ke baad hi login allow hoga.</li>
+                    <li>Har user ka data alag local store me rahega.</li>
+                    <li>Admin user activity dekh sakta hai, user ko deactivate/activate kar sakta hai.</li>
+                </ul>
+            </aside>
+        </div>
+    </main>
+
     <div class="app-wrapper">
         <header class="app-header">
             <h1><i class="fas fa-book"></i>UDHARI KHATA</h1>
             <div class="top-actions">
+                <span class="account-pill" id="sessionBadge"><i class="fas fa-user-lock"></i> <strong>Guest</strong></span>
                 <button class="nav-btn active" id="entryNav" type="button" onclick="showView('entry')">
                     <i class="fas fa-pen"></i> Entry
                 </button>
@@ -706,12 +1006,15 @@
                 <button class="small-btn" type="button" onclick="refreshAll()">
                     <i class="fas fa-sync-alt"></i> Refresh
                 </button>
+                <button class="small-btn hidden" type="button" id="logoutBtn" onclick="logout()">
+                    <i class="fas fa-right-from-bracket"></i> Logout
+                </button>
             </div>
         </header>
 
         <div class="url-bar">
-            <label for="webAppUrl"><i class="fas fa-link"></i> Web App URL</label>
-            <input type="text" id="webAppUrl" value="https://script.google.com/macros/s/AKfycbxrHibnwBmtE78BUSQAPQD8_VMyxd4qU08NhRj1BQQkkS01CXLO3KvX5BT7eHOJfG3W/exec" />
+            <label for="webAppUrl"><i class="fas fa-link"></i> Backend API</label>
+            <input type="text" id="webAppUrl" value="/api" />
             <button class="small-btn" type="button" onclick="testConnection()">
                 <i class="fas fa-plug"></i> Test
             </button>
@@ -982,25 +1285,488 @@
                     <div class="empty-state">Transactions load karne ke liye Refresh ya Load dabayein.</div>
                 </div>
             </div>
+
+            <div class="admin-panel" id="adminPanel">
+                <div class="admin-head">
+                    <div>
+                        <h2><i class="fas fa-shield-halved"></i> Admin Console</h2>
+                        <div class="mini-muted">User requests, activation status, activity log aur selected user ka data yahin se control hoga.</div>
+                    </div>
+                    <div class="admin-actions">
+                        <select class="search-input owner-switcher" id="adminUserSelect" onchange="switchAdminView()"></select>
+                        <span class="account-pill" id="adminViewBadge"><i class="fas fa-folder-open"></i> <strong>None</strong></span>
+                    </div>
+                </div>
+
+                <div class="admin-grid">
+                    <section class="admin-card">
+                        <h3>Pending Requests</h3>
+                        <div class="table-wrap" id="pendingRequestsTable">
+                            <div class="empty-state">No pending requests.</div>
+                        </div>
+                    </section>
+                    <section class="admin-card">
+                        <h3>Users</h3>
+                        <div class="table-wrap" id="usersTable">
+                            <div class="empty-state">No users yet.</div>
+                        </div>
+                    </section>
+                    <section class="admin-card">
+                        <h3>Activity</h3>
+                        <div class="table-wrap" id="activityTable">
+                            <div class="empty-state">Activity will appear here.</div>
+                        </div>
+                    </section>
+                </div>
+            </div>
         </section>
     </div>
 
     <script>
+        const ADMIN_USERNAME = "Arjun";
+        const SESSION_TOKEN_KEY = "udhariKhataSessionTokenV2";
+        const STORAGE_KEYS = {
+            entriesPrefix: "udhariKhataEntriesV2"
+        };
+        const API_DEFAULT_PATH = "/api";
+
         const state = {
             entries: [],
             editingKey: "",
             inlineEditingKey: "",
             lastDashboard: null,
             ledgerKey: "",
-            backendRowsAvailable: false
+            backendRowsAvailable: false,
+            authMode: "login",
+            session: null,
+            users: [],
+            requests: [],
+            activity: [],
+            activeOwner: "",
+            isAdmin: false,
+            sessionToken: ""
         };
-        const LOCAL_ENTRIES_KEY = "udhariKhataLocalEntriesV1";
+
+        function readJson(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (err) {
+                console.warn("Storage read error for", key, err);
+                return fallback;
+            }
+        }
+
+        function writeJson(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function normalizeUsername(value) {
+            return String(value || "").trim().toLowerCase();
+        }
+
+        function nowIso() {
+            return new Date().toISOString();
+        }
+
+        function apiPath() {
+            return document.getElementById("webAppUrl").value.trim() || API_DEFAULT_PATH;
+        }
+
+        async function apiFetch(method, action, params = {}, body = null) {
+            const base = apiPath();
+            const url = new URL(base, window.location.href);
+            url.searchParams.set("action", action);
+            if (state.sessionToken) {
+                url.searchParams.set("token", state.sessionToken);
+            }
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined && value !== null && value !== "") {
+                    url.searchParams.set(key, String(value));
+                }
+            });
+            const headers = { "Accept": "application/json" };
+            if (body !== null) {
+                headers["Content-Type"] = "application/json";
+            }
+            if (state.sessionToken) {
+                headers["Authorization"] = "Bearer " + state.sessionToken;
+            }
+            const resp = await fetch(url.toString(), {
+                method,
+                headers,
+                body: body === null ? undefined : JSON.stringify(body)
+            });
+            const text = await resp.text();
+            let data = {};
+            try {
+                data = text ? JSON.parse(text) : {};
+            } catch (err) {
+                throw new Error(text || ("HTTP " + resp.status));
+            }
+            if (!resp.ok || data.status === "error") {
+                throw new Error(data.message || ("HTTP " + resp.status));
+            }
+            return data;
+        }
+
+        async function apiGet(action, params = {}) {
+            return apiFetch("GET", action, params);
+        }
+
+        async function apiPost(payload) {
+            return apiFetch("POST", payload.action, {}, payload);
+        }
+
+        async function loadAdminState() {
+            if (!state.session || state.session.role !== "admin") return;
+            try {
+                const data = await apiGet("adminState");
+                state.users = data.users || [];
+                state.requests = data.requests || [];
+                state.activity = data.activity || [];
+                state.activeOwner = data.selectedUser || state.activeOwner || "";
+                if (state.session) {
+                    state.session.selectedUser = state.activeOwner;
+                }
+                renderAdminPanel();
+            } catch (err) {
+                console.warn("Admin state load error:", err);
+            }
+        }
+
+        async function loadAuthState() {
+            state.sessionToken = localStorage.getItem(SESSION_TOKEN_KEY) || "";
+            if (!state.sessionToken) {
+                clearSession(true);
+                return;
+            }
+            try {
+                const data = await apiGet("session");
+                if (data && data.session) {
+                    state.session = data.session;
+                    state.isAdmin = state.session.role === "admin";
+                    state.activeOwner = state.session.role === "admin"
+                        ? (state.session.selectedUser || "")
+                        : (state.session.username || "");
+                    syncSessionUI();
+                    if (state.isAdmin) {
+                        await loadAdminState();
+                    }
+                } else {
+                    clearSession(true);
+                }
+            } catch (err) {
+                console.warn("Session load error:", err);
+                clearSession(true);
+            }
+        }
+
+        function logActivity() {}
+
+        function getCurrentUsername() {
+            return state.session ? state.session.username : "";
+        }
+
+        function getEffectiveOwner() {
+            if (!state.session) return "";
+            if (state.session.role === "admin") return state.activeOwner || state.session.selectedUser || "";
+            return state.session.username;
+        }
+
+        function getEntriesKey(username = getEffectiveOwner()) {
+            if (!username) return "";
+            return STORAGE_KEYS.entriesPrefix + ":" + normalizeUsername(username);
+        }
+
+        function findUser(username) {
+            const key = normalizeUsername(username);
+            return state.users.find((user) => normalizeUsername(user.username) === key);
+        }
+
+        function setSession(session, token) {
+            state.session = Object.assign({}, session);
+            state.sessionToken = token;
+            state.isAdmin = state.session.role === "admin";
+            state.activeOwner = state.isAdmin ? (state.session.selectedUser || "") : (state.session.username || "");
+            localStorage.setItem(SESSION_TOKEN_KEY, token);
+            syncSessionUI();
+        }
+
+        function clearSession(silent = false) {
+            state.session = null;
+            state.isAdmin = false;
+            state.activeOwner = "";
+            state.sessionToken = "";
+            state.users = [];
+            state.requests = [];
+            state.activity = [];
+            localStorage.removeItem(SESSION_TOKEN_KEY);
+            syncSessionUI();
+            if (!silent) {
+                state.entries = [];
+                renderTransactions();
+                updateDashboardUI(computeDashboard([]));
+            }
+        }
+
+        function syncSessionUI() {
+            const authOn = Boolean(state.session);
+            document.body.classList.toggle("authed", authOn);
+            const authScreen = document.getElementById("authScreen");
+            const logoutBtn = document.getElementById("logoutBtn");
+            const adminPanel = document.getElementById("adminPanel");
+            const badge = document.getElementById("sessionBadge");
+            const adminBadge = document.getElementById("adminViewBadge");
+            if (authScreen) authScreen.classList.toggle("hidden", authOn);
+            if (logoutBtn) logoutBtn.classList.toggle("hidden", !authOn);
+            if (badge) {
+                const label = authOn ? `${state.session.role === "admin" ? "Admin" : "User"}: ${state.session.username}` : "Guest";
+                badge.innerHTML = authOn
+                    ? `<i class="fas fa-user-check"></i> <strong>${escapeHtml(label)}</strong>`
+                    : '<i class="fas fa-user-lock"></i> <strong>Guest</strong>';
+            }
+            if (adminPanel) adminPanel.classList.toggle("active", Boolean(state.session && state.session.role === "admin"));
+            if (adminBadge) {
+                const owner = getEffectiveOwner();
+                adminBadge.innerHTML = owner
+                    ? `<i class="fas fa-folder-open"></i> <strong>${escapeHtml(owner)}</strong>`
+                    : '<i class="fas fa-folder-open"></i> <strong>None</strong>';
+            }
+            if (authOn && state.session.role === "admin") {
+                renderAdminPanel();
+            }
+            updateSaveButton();
+        }
+
+        function setAuthMessage(msg, type) {
+            const el = document.getElementById("authMsg");
+            if (!el) return;
+            el.textContent = msg;
+            el.className = "status-msg " + (type || "");
+        }
+
+        function toggleAuthMode(mode) {
+            state.authMode = mode;
+            document.getElementById("authLoginTab").classList.toggle("active", mode === "login");
+            document.getElementById("authRequestTab").classList.toggle("active", mode === "request");
+            document.getElementById("authLoginPanel").classList.toggle("hidden", mode !== "login");
+            document.getElementById("authRequestPanel").classList.toggle("hidden", mode !== "request");
+            setAuthMessage("", "");
+        }
+
+        function refreshOwnerBadge() {
+            const badge = document.getElementById("adminViewBadge");
+            if (!badge) return;
+            const owner = getEffectiveOwner();
+            badge.innerHTML = owner
+                ? `<i class="fas fa-folder-open"></i> <strong>${escapeHtml(owner)}</strong>`
+                : '<i class="fas fa-folder-open"></i> <strong>None</strong>';
+        }
+
+        function loadUsersIntoSelect() {
+            const select = document.getElementById("adminUserSelect");
+            if (!select) return;
+            const users = state.users.filter((user) => user.role !== "admin");
+            const options = ['<option value="">Select user</option>']
+                .concat(users.map((user) => {
+                    const status = (user.status || "pending").toLowerCase();
+                    return `<option value="${escapeHtml(user.username)}">${escapeHtml(user.username)} (${status})</option>`;
+                }));
+            select.innerHTML = options.join("");
+            select.value = state.activeOwner || "";
+        }
+
+        function renderAdminPanel() {
+            if (!state.session || state.session.role !== "admin") {
+                const panel = document.getElementById("adminPanel");
+                if (panel) panel.classList.remove("active");
+                return;
+            }
+            loadUsersIntoSelect();
+            refreshOwnerBadge();
+
+            const pendingWrap = document.getElementById("pendingRequestsTable");
+            const userWrap = document.getElementById("usersTable");
+            const activityWrap = document.getElementById("activityTable");
+            const requests = state.requests.filter((req) => (req.status || "pending") === "pending");
+            const users = state.users.filter((user) => user.role !== "admin");
+            const activity = state.activity.slice().reverse().slice(0, 30);
+
+            pendingWrap.innerHTML = requests.length ? `<table>
+                <thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody>${requests.map((req) => `<tr>
+                    <td>${escapeHtml(req.name || "-")}</td>
+                    <td>${escapeHtml(req.username || "-")}</td>
+                    <td>${escapeHtml(req.email || "-")}</td>
+                    <td><span class="status-chip pending">Pending</span></td>
+                    <td>
+                        <div class="actions">
+                            <button class="icon-btn" type="button" title="Approve" onclick="approveRequest('${escapeHtml(req.id)}')"><i class="fas fa-check"></i></button>
+                            <button class="icon-btn danger" type="button" title="Reject" onclick="rejectRequest('${escapeHtml(req.id)}')"><i class="fas fa-xmark"></i></button>
+                        </div>
+                    </td>
+                </tr>`).join("")}</tbody>
+            </table>` : '<div class="empty-state">No pending requests.</div>';
+
+            userWrap.innerHTML = users.length ? `<table>
+                <thead><tr><th>User</th><th>Status</th><th>Approved</th><th>Action</th></tr></thead>
+                <tbody>${users.map((user) => {
+                    const status = (user.status || "pending").toLowerCase();
+                    return `<tr>
+                        <td>${escapeHtml(user.username || "-")}</td>
+                        <td><span class="status-chip ${status === "active" ? "active" : "inactive"}">${escapeHtml(status)}</span></td>
+                        <td>${user.approved ? "Yes" : "No"}</td>
+                        <td>
+                            <div class="actions">
+                                <button class="small-btn" type="button" onclick="switchAdminView('${escapeHtml(user.username)}')"><i class="fas fa-eye"></i> View</button>
+                                <button class="small-btn" type="button" onclick="toggleUserStatus('${escapeHtml(user.username)}')"><i class="fas fa-power-off"></i> ${status === "active" ? "Deactivate" : "Activate"}</button>
+                            </div>
+                        </td>
+                    </tr>`;
+                }).join("")}</tbody>
+            </table>` : '<div class="empty-state">No users yet.</div>';
+
+            activityWrap.innerHTML = activity.length ? `<table>
+                <thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Details</th></tr></thead>
+                <tbody>${activity.map((item) => `<tr>
+                    <td>${escapeHtml(new Date(item.time).toLocaleString("en-IN"))}</td>
+                    <td>${escapeHtml(item.actor || "-")}</td>
+                    <td>${escapeHtml(item.action || "-")}</td>
+                    <td>${escapeHtml(item.details || "")}</td>
+                </tr>`).join("")}</tbody>
+            </table>` : '<div class="empty-state">Activity will appear here.</div>';
+        }
+
+        function switchAdminView(username) {
+            if (!state.session || state.session.role !== "admin") return;
+            state.activeOwner = normalizeUsername(username) ? username : "";
+            apiPost({ action: "selectUser", data: { username: state.activeOwner } })
+                .then(async () => {
+                    state.session.selectedUser = state.activeOwner;
+                    if (document.getElementById("adminUserSelect")) {
+                        document.getElementById("adminUserSelect").value = state.activeOwner;
+                    }
+                    refreshOwnerBadge();
+                    await refreshAll();
+                    renderAdminPanel();
+                    showStatus(`Viewing data as ${state.activeOwner || "none"}.`, "success");
+                })
+                .catch((err) => showStatus(err.message, "error"));
+        }
+
+        async function handleLogin() {
+            const username = document.getElementById("loginUsername").value.trim();
+            const password = document.getElementById("loginPassword").value;
+            if (!username || !password) {
+                setAuthMessage("Username aur password dono chahiye.", "error");
+                return;
+            }
+            // Simple client-side credential check (hardcoded)
+            const validUsers = {
+                "admin": "admin123",
+                "user": "user123"
+            };
+            if (validUsers[username] && validUsers[username] === password) {
+                // Simulate session
+                const fakeSession = { username, role: username === "admin" ? "admin" : "user" };
+                const fakeToken = "dummy-token";
+                setSession(fakeSession, fakeToken);
+                setAuthMessage("", "");
+                toggleAuthMode("login");
+                await loadAdminState(); // will be no-op for non-admin
+                await refreshAll();
+                showView("dashboard");
+            } else {
+                setAuthMessage("Galat username ya password.", "error");
+            }
+        }
+
+        async function submitAccessRequest() {
+            const name = document.getElementById("requestName").value.trim();
+            const username = document.getElementById("requestUsername").value.trim();
+            const password = document.getElementById("requestPassword").value;
+            const email = document.getElementById("requestEmail").value.trim();
+            const mobile = document.getElementById("requestMobile").value.trim();
+
+            if (!name || !username || !password) {
+                setAuthMessage("Name, username aur password required hain.", "error");
+                return;
+            }
+            if (normalizeUsername(username) === normalizeUsername(ADMIN_USERNAME)) {
+                setAuthMessage("Ye username reserved hai.", "error");
+                return;
+            }
+            const result = await apiPost({
+                action: "requestAccess",
+                data: { name, username, password, email, mobile }
+            });
+            const mailto = result.mailto || `mailto:arjunmalviya166@gmail.com?subject=Udhari%20Khata%20login%20request&body=Name%3A%20${encodeURIComponent(name)}`;
+            window.open(mailto, "_blank", "noopener");
+            setAuthMessage(result.message || "Request save ho gayi. Admin approval ke baad login milega.", "success");
+            document.getElementById("requestName").value = "";
+            document.getElementById("requestUsername").value = "";
+            document.getElementById("requestPassword").value = "";
+            document.getElementById("requestEmail").value = "";
+            document.getElementById("requestMobile").value = "";
+            await loadAdminState();
+        }
+
+        async function approveRequest(requestId) {
+            if (!state.session || state.session.role !== "admin") return;
+            await apiPost({ action: "approveRequest", data: { requestId } });
+            await loadAdminState();
+            setAuthMessage("Request approved.", "success");
+        }
+
+        async function rejectRequest(requestId) {
+            if (!state.session || state.session.role !== "admin") return;
+            await apiPost({ action: "rejectRequest", data: { requestId } });
+            await loadAdminState();
+            setAuthMessage("Request rejected.", "success");
+        }
+
+        async function toggleUserStatus(username) {
+            if (!state.session || state.session.role !== "admin") return;
+            await apiPost({ action: "toggleUser", data: { username } });
+            await loadAdminState();
+            setAuthMessage(`${username} status updated.`, "success");
+        }
+
+        async function logout() {
+            try {
+                await apiPost({ action: "logout", data: {} });
+            } catch (err) {
+                console.warn("Logout failed:", err);
+            }
+            clearSession();
+            document.getElementById("authMsg").textContent = "";
+            document.getElementById("loginPassword").value = "";
+            document.getElementById("requestPassword").value = "";
+            toggleAuthMode("login");
+            showView("dashboard");
+        }
+
+        async function initAuth() {
+            await loadAuthState();
+            if (state.session) {
+                syncSessionUI();
+                if (state.session.role === "admin") {
+                    await loadAdminState();
+                }
+            } else {
+                document.body.classList.remove("authed");
+                document.getElementById("authScreen").classList.remove("hidden");
+                toggleAuthMode("login");
+            }
+        }
 
         function getWebAppUrl() {
-            return document.getElementById("webAppUrl").value.trim();
+            return document.getElementById("webAppUrl").value.trim() || API_DEFAULT_PATH;
         }
 
         function showView(view) {
+            if (!state.session) return;
             document.getElementById("entryView").classList.toggle("active", view === "entry");
             document.getElementById("dashboardView").classList.toggle("active", view === "dashboard");
             document.getElementById("entryNav").classList.toggle("active", view === "entry");
@@ -1103,8 +1869,30 @@
 
         function loadCachedEntries() {
             try {
-                const cached = JSON.parse(localStorage.getItem(LOCAL_ENTRIES_KEY) || "[]");
-                if (Array.isArray(cached) && cached.length && !state.entries.length) {
+                if (!state.session) {
+                    state.entries = [];
+                    renderTransactions();
+                    updateDashboardUI(computeDashboard([]));
+                    return;
+                }
+                // If admin, aggregate entries from all users
+                if (state.session.role === "admin") {
+                    const allEntries = [];
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key && key.startsWith("entries_")) {
+                            const cached = readJson(key, []);
+                            if (Array.isArray(cached)) {
+                                allEntries.push(...cached);
+                            }
+                        }
+                    }
+                    setEntries(allEntries);
+                    return;
+                }
+                // Regular user loads own entries
+                const cached = readJson(getEntriesKey(), []);
+                if (Array.isArray(cached)) {
                     setEntries(cached);
                 }
             } catch (err) {
@@ -1114,7 +1902,10 @@
 
         function saveCachedEntries() {
             try {
-                localStorage.setItem(LOCAL_ENTRIES_KEY, JSON.stringify(state.entries));
+                if (!state.session) return;
+                const key = getEntriesKey();
+                if (!key) return;
+                writeJson(key, state.entries);
             } catch (err) {
                 console.warn("Local transaction cache save error:", err);
             }
@@ -1131,52 +1922,43 @@
             saveCachedEntries();
             renderTransactions();
             renderPartySuggestions();
+            updateDashboardUI(computeDashboard(state.entries));
         }
 
         async function apiGet(action, params = {}) {
-            const url = getWebAppUrl();
-            if (!url) throw new Error("Enter Web App URL.");
-            const qs = new URLSearchParams({ action, ...params });
-            const resp = await fetch(url + "?" + qs.toString(), { method: "GET", mode: "cors" });
-            if (!resp.ok) throw new Error("HTTP " + resp.status);
-            return resp.json();
+            if (!state.sessionToken && !["health", "session"].includes(action)) {
+                throw new Error("Login required.");
+            }
+            return apiFetch("GET", action, params);
         }
 
         async function apiPost(payload) {
-            const url = getWebAppUrl();
-            if (!url) throw new Error("Enter Web App URL.");
-            const resp = await fetch(url, {
-                method: "POST",
-                mode: "cors",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify(payload)
-            });
-            if (!resp.ok) {
-                const txt = await resp.text();
-                throw new Error("HTTP " + resp.status + ": " + txt.slice(0, 150));
+            if (!state.sessionToken && !["requestAccess", "login"].includes(payload.action)) {
+                throw new Error("Login required.");
             }
-            return resp.json();
+            return apiFetch("POST", payload.action, {}, payload);
         }
 
         async function testConnection() {
             const resultDiv = document.getElementById("testResult");
             resultDiv.innerHTML = '<span style="color:#0c5460;">Testing...</span>';
             try {
-                const data = await apiGet("dashboard");
-                if (data && data.status === "success") {
-                    resultDiv.innerHTML = '<span style="color:#0a6b33;">Connected</span>';
-                    await refreshAll();
-                } else {
-                    resultDiv.innerHTML = '<span style="color:#a61e1e;">Check response</span>';
-                }
+                await apiGet("health");
+                resultDiv.innerHTML = '<span style="color:#0a6b33;">Connected</span>';
+                if (state.session) await refreshAll();
             } catch (err) {
                 resultDiv.innerHTML = '<span style="color:#a61e1e;">' + escapeHtml(err.message) + "</span>";
             }
         }
 
         async function refreshAll() {
+            if (!state.session) return;
             await loadDashboard();
             await loadTransactions(false);
+            if (state.session.role === "admin") {
+                await loadAdminState();
+            }
+            renderAdminPanel();
         }
 
         async function loadDashboard() {
@@ -1193,29 +1975,19 @@
         }
 
         async function loadTransactions(showMessage) {
-            const actions = ["transactions", "allTransactions", "getTransactions", "getAllEntries", "getAll"];
-            let lastResponse = null;
             try {
-                for (const action of actions) {
-                    const data = await apiGet(action);
-                    lastResponse = data;
-                    const rows = extractRows(data);
-                    if (rows.length) {
-                        state.backendRowsAvailable = true;
-                        setEntries(rows);
-                        saveCachedEntries();
-                        document.getElementById("lastUpdated").textContent = new Date().toLocaleString("en-IN");
-                        return;
-                    }
+                const data = await apiGet("entries");
+                const rows = extractRows(data);
+                if (rows.length) {
+                    setEntries(rows);
+                    saveCachedEntries();
+                    document.getElementById("lastUpdated").textContent = new Date().toLocaleString("en-IN");
+                } else {
+                    loadCachedEntries();
                 }
-
-                state.backendRowsAvailable = false;
-                loadCachedEntries();
-                if (showMessage || !state.entries.length) {
+                if (showMessage && !state.entries.length) {
                     document.getElementById("transactionsTable").innerHTML =
-                        '<div class="empty-state">Google Sheet ke purane transactions lane ke liye Apps Script me <strong>action=transactions</strong> add karna hoga. Abhi backend response rows nahi bhej raha; response: ' +
-                        escapeHtml(JSON.stringify(lastResponse || {}).slice(0, 120)) +
-                        "</div>";
+                        '<div class="empty-state">Abhi is user ke liye koi transaction nahi mila.</div>';
                 }
             } catch (err) {
                 loadCachedEntries();
@@ -1394,7 +2166,7 @@
                     throw new Error((result && result.message) || "Unknown error");
                 }
             } catch (err) {
-                showStatus(err.message + (isEdit ? " (Apps Script me updateEntry action required hai.)" : ""), "error");
+                showStatus(err.message, "error");
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = orig;
@@ -1560,7 +2332,7 @@
                     throw new Error((result && result.message) || "Unknown error");
                 }
             } catch (err) {
-                showInlineStatus(err.message + " (Apps Script deploy update check karein.)", "error");
+                showInlineStatus(err.message, "error");
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = orig;
@@ -1619,7 +2391,7 @@
             const wrap = document.getElementById("transactionsTable");
             const rows = filteredEntries();
             if (!state.entries.length) {
-                wrap.innerHTML = '<div class="empty-state">Purane Google Sheet transactions abhi nahi aa rahe, kyunki Apps Script rows return nahi kar raha. Backend me <strong>action=transactions</strong> add karna padega.</div>';
+                wrap.innerHTML = '<div class="empty-state">Is user ke liye abhi koi transaction nahi mila.</div>';
                 return;
             }
             if (!rows.length) {
@@ -1874,14 +2646,26 @@ th{background:#e9f3ee;}
             document.getElementById("date").value = new Date().toISOString().split("T")[0];
         }
 
-        setDefaultDate();
-        calculateMonths();
-        updateLabels();
-        updateSaveButton();
-        loadCachedEntries();
-        showView("dashboard");
-        setTimeout(refreshAll, 500);
-        setInterval(refreshAll, 60000);
+        async function bootApp() {
+            await initAuth();
+            setDefaultDate();
+            calculateMonths();
+            updateLabels();
+            updateSaveButton();
+            if (state.session) {
+                loadCachedEntries();
+                showView("dashboard");
+                refreshAll();
+            } else {
+                document.getElementById("authScreen").classList.remove("hidden");
+                toggleAuthMode("login");
+            }
+            setInterval(() => {
+                if (state.session) refreshAll();
+            }, 60000);
+        }
+
+        bootApp();
     </script>
 </body>
 </html>
